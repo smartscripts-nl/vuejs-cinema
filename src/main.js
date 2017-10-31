@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import './style.scss';
-import movielist from './movie-list';
-import moviefilter from './movie-filter';
+
+import MovieList from './components/MovieList.vue';
+import MovieFilter from './components/MovieFilter.vue';
 
 new Vue({
 
@@ -37,9 +38,9 @@ new Vue({
 	components: {
 
 		//movie-list must have props to receive the state of the genre and time filters (arrays):
-		'movie-list': movielist,
+		MovieList,
 
 		//can send check-filter event; payload to be stored in the genre and time arrays:
-		'movie-filter': moviefilter
+		MovieFilter
 	}
 });

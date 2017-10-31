@@ -36,9 +36,11 @@ new Vue({
 	},
 
 	components: {
+
+		//movie-list must have props to receive the state of the genre and time filters (arrays):
 		'movie-list': movielist,
 
-		//can send check-filter event:
+		//can send check-filter event; payload to be stored in the genre and time arrays:
 		'movie-filter': moviefilter
 	}
 });

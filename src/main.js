@@ -8,7 +8,6 @@ new Vue({
 	el: '#app',
 
 	data: {
-
 		//arrays for filters (contains only activated filters):
 		genre: [],
 		time: []

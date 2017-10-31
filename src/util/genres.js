@@ -1,3 +1,6 @@
+
+//Alex: Object.freeze: object will not be modifyable in any way:
+
 module.exports = Object.freeze({
   ANIMATION: 'Animation',
   COMEDY: 'Comedy',

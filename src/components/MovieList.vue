@@ -24,7 +24,15 @@
 					return true;
 				}
 
-				return this.genre.find(genre => movie.genre === genre);
+				let movieGenres = movie.movie.Genre.split(', ');
+				let matched = true;
+				this.genre.forEach(genre => {
+					if (movieGenres.indexOf(genre) === -1) {
+						matched = false;
+					}
+				});
+
+				return matched;
 			}
 		},
 

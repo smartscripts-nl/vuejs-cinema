@@ -21,6 +21,8 @@
     import times from '../util/times';
     import MovieItem from './MovieItem.vue';
 
+    //import { bus, busEventhandlers } from '../util/bus';
+
     export default {
         props: [ 'genre', 'time', 'movies', 'day' ],
         methods: {
@@ -68,6 +70,10 @@
         },
         components: {
             MovieItem
-        }
+        },
+
+        /*created() {
+            busEventhandlers.assign(this, 'MovieList');
+        }*/
     }
 </script>

@@ -14,11 +14,10 @@ import moment from 'moment-timezone';
 moment.tz.setDefault('UTC');
 
 //add it as a property to the root instance, to make it available in the sub-components (assign it to the moment-property in the data and call it as this.$moment):
-Object.defineProperty(Vue.prototype, '$moment', { get() { return this.$root.moment; } });
+Object.defineProperty(Vue.prototype, '$moment', { get() { return moment; } });
 
 //init the global event bus + import eventhandlers for events emitted through this bus:
-import { bus, checkFilter, initBus } from './util/bus';
-initBus();
+import { busEventhandlers } from './util/bus';
 
 new Vue({
 
@@ -31,10 +30,7 @@ new Vue({
 
 		movies: [],
 
-		moment,
-		day: moment(),
-
-		bus
+		day: moment()
 	},
 
 	components: {
@@ -51,7 +47,6 @@ new Vue({
 			this.movies = response.data;
 		});
 
-		//bind(this) to make this Vue root instance available to the imported checkFilter event handler:
-		this.$bus.$on('check-filter', checkFilter.bind(this));
+		busEventhandlers.assign(this, 'main');
 	}
 });

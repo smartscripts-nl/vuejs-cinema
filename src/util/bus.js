@@ -2,34 +2,54 @@ import Vue from 'vue';
 
 //================ THE GLOBAL EVENT BUS ===========
 
+//this one only will be executed once:
+
 const bus = new Vue();
 
-function initBus () {
+//initialize a global "event bus", to pass around events more easily (watch out, it also has to be added to the data prop of the root Vue instance!):
+Object.defineProperty(Vue.prototype, '$bus', { get() { return bus; } });
 
-	//initialize a global "event bus", to pass around events more easily (watch out, it also has to be added to the data prop of the root Vue instance!):
-	Object.defineProperty(Vue.prototype, '$bus', { get() { return this.$root.bus; } });
-}
+let busEventhandlers = {
 
+	eventhandlerAssignments: {
 
-//=============== GLOBAL BUS EVENTHANDLERS ========
+		/**bind(rootInstance) to make this Vue root instance available to the imported event handler:
 
-/**
-* @param category Can either be 'genre' or 'time'
-*/
-function checkFilter(category, title, checked) {
+		Called like so (for example in created() method of module) for main module main.js:
+		busEventhandlers.assign(this, 'main');
 
-	if (checked) {
-		this[category].push(title);
-	}
+		* Called from @see assign
+		*/
+		main: rootInstance => {
+			rootInstance.$bus.$on('check-filter', busEventhandlers.checkFilter.bind(rootInstance));
+		}
+	},
 
-	//remove item from active filters:
-	else {
-		let index = this[category].indexOf(title);
+	assign (rootInstance, component) {
+		this.eventhandlerAssignments[component](rootInstance);
+	},
 
-		if (index > -1) {
-			this[category].splice(index, 1);
+	//=============== GLOBAL BUS EVENTHANDLERS ========
+
+	/**
+	* @param category Can either be 'genre' or 'time'
+	*/
+	checkFilter(category, title, checked) {
+
+		if (checked) {
+			this[category].push(title);
+		}
+
+		//remove item from active filters:
+		else {
+			let index = this[category].indexOf(title);
+
+			if (index > -1) {
+				this[category].splice(index, 1);
+			}
 		}
 	}
-}
+};
 
-export { bus, checkFilter, initBus };
+export { busEventhandlers };
+

@@ -1,5 +1,5 @@
 <template>
-    <div v-bind:class="{ 'check-filter': true, active: checked }" v-on:click="checkFilter">
+    <div v-bind:class="{ 'check-filter': true, active: checked }" @click="checkFilter">
         <span class="checkbox"></span>
         <span class="check-filter-title">{{ title }}</span>
     </div>

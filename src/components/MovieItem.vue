@@ -1,7 +1,7 @@
 <template>
     <div class="movie">
         <div class="movie-col-left">
-            <img v-bind:src="movie.Poster">
+            <img :src="movie.Poster">
         </div>
         <div class="movie-col-right">
             <div class="movie-title">

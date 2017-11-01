@@ -9,42 +9,45 @@ const bus = new Vue();
 //initialize a global "event bus", to pass around events more easily (watch out, it also has to be added to the data prop of the root Vue instance!):
 Object.defineProperty(Vue.prototype, '$bus', { get() { return bus; } });
 
-let busEventhandlers = {
+let busEvents = {
 
-	//=============== GLOBAL BUS EVENTHANDLERS ========
+	//=============== GLOBAL BUS EVENTHANDLER MEDIATORS ========
 
 	/**
-	* @param category Can either be 'genre' or 'time'
+	* @param component
+	* @param eventName
+	* @param args Optional, context dependent
+	*
+	* Example call (extra arguments args are optional and context dependent):
+	* busEvents.emit(this, 'CheckFilter', this.category, this.title, this.checked);
 	*/
-	checkFilterEvent(component, emitOrHandle) {
-
-		/**
-		* Called from CheckFilter.vue:
-		* busEventhandlers.checkFilter(this, 'emit');
-		*/
-		if (emitOrHandle === 'emit') {
-
-			bus.$emit('check-filter', component.category, component.title, component.checked);
-		}
-
-		/**bind(component) to make the Vue root instance available to the imported event handler:
-
-		Called like so (for example in created() method of module) for main module main.js:
-		busEventhandlers.assign(this, 'main');
-
-		* Called from main.js:
-		* busEventhandlers.checkFilter(this, 'handle');
-		*/
-		else {
-
-			bus.$on('check-filter',
-				this.checkFilterHandle
-				.bind(component)
-			);
-		}
+	emit(component, eventName, ...args) {
+		bus.$emit(eventName, ...args);
 	},
 
-	checkFilterHandle(category, title, checked) {
+	/**:
+	* Example call:
+	* busEvents.handle(this, 'CheckFilter');
+	*/
+	handle(component, eventName) {
+
+		bus.$on(eventName,
+
+			this['on' + eventName]
+
+			//to make the Vue root or component instance available to the imported event handler:
+			.bind(component)
+		);
+	},
+
+
+
+	// =================== CUSTOM EVENTHANDLERS =====
+
+	/**
+	* The part after "on" is the name of the event thas was emitted
+	*/
+	onCheckFilter(category, title, checked) {
 
 			if (checked) {
 				this[category].push(title);
@@ -61,4 +64,4 @@ let busEventhandlers = {
 	}
 };
 
-export { busEventhandlers };
+export { busEvents };

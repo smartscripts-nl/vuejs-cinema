@@ -17,7 +17,7 @@ moment.tz.setDefault('UTC');
 Object.defineProperty(Vue.prototype, '$moment', { get() { return moment; } });
 
 //init the global event bus + import eventhandlers for events emitted through this bus:
-import { busEventhandlers } from './util/bus';
+import { busEvents } from './util/bus';
 
 new Vue({
 
@@ -47,6 +47,6 @@ new Vue({
 			this.movies = response.data;
 		});
 
-		busEventhandlers.checkFilterEvent(this, 'handle');
+		busEvents.handle(this, 'CheckFilter');
 	}
 });

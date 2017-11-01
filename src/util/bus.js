@@ -11,45 +11,54 @@ Object.defineProperty(Vue.prototype, '$bus', { get() { return bus; } });
 
 let busEventhandlers = {
 
-	eventhandlerAssignments: {
-
-		/**bind(rootInstance) to make this Vue root instance available to the imported event handler:
-
-		Called like so (for example in created() method of module) for main module main.js:
-		busEventhandlers.assign(this, 'main');
-
-		* Called from @see assign
-		*/
-		main: rootInstance => {
-			rootInstance.$bus.$on('check-filter', busEventhandlers.checkFilter.bind(rootInstance));
-		}
-	},
-
-	assign (rootInstance, component) {
-		this.eventhandlerAssignments[component](rootInstance);
-	},
-
 	//=============== GLOBAL BUS EVENTHANDLERS ========
 
 	/**
 	* @param category Can either be 'genre' or 'time'
 	*/
-	checkFilter(category, title, checked) {
+	checkFilterEvent(component, emitOrHandle) {
 
-		if (checked) {
-			this[category].push(title);
+		/**
+		* Called from CheckFilter.vue:
+		* busEventhandlers.checkFilter(this, 'emit');
+		*/
+		if (emitOrHandle === 'emit') {
+
+			bus.$emit('check-filter', component.category, component.title, component.checked);
 		}
 
-		//remove item from active filters:
+		/**bind(component) to make the Vue root instance available to the imported event handler:
+
+		Called like so (for example in created() method of module) for main module main.js:
+		busEventhandlers.assign(this, 'main');
+
+		* Called from main.js:
+		* busEventhandlers.checkFilter(this, 'handle');
+		*/
 		else {
-			let index = this[category].indexOf(title);
 
-			if (index > -1) {
-				this[category].splice(index, 1);
-			}
+			bus.$on('check-filter',
+				this.checkFilterHandle
+				.bind(component)
+			);
 		}
+	},
+
+	checkFilterHandle(category, title, checked) {
+
+			if (checked) {
+				this[category].push(title);
+			}
+
+			//remove item from active filters:
+			else {
+				let index = this[category].indexOf(title);
+
+				if (index > -1) {
+					this[category].splice(index, 1);
+				}
+			}
 	}
 };
 
 export { busEventhandlers };
-

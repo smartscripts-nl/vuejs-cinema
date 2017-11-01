@@ -47,6 +47,6 @@ new Vue({
 			this.movies = response.data;
 		});
 
-		busEventhandlers.assign(this, 'main');
+		busEventhandlers.checkFilterEvent(this, 'handle');
 	}
 });

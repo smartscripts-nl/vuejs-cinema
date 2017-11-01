@@ -5,6 +5,9 @@
     </div>
 </template>
 <script>
+
+    import { busEventhandlers } from '../util/bus';
+
     export default {
         data() {
             return {
@@ -15,7 +18,7 @@
         methods: {
             checkFilter() {
                 this.checked = !this.checked;
-                this.$bus.$emit('check-filter', this.category, this.title, this.checked);
+                busEventhandlers.checkFilterEvent(this, 'emit');
             }
         }
     }

@@ -16,12 +16,9 @@ moment.tz.setDefault('UTC');
 //add it as a property to the root instance, to make it available in the sub-components (assign it to the moment-property in the data and call it as this.$moment):
 Object.defineProperty(Vue.prototype, '$moment', { get() { return this.$root.moment; } });
 
-//import eventhandlers for events emitted through the bus:
-import { checkFilter } from './util/bus';
-
-//initialize a global "event bus", to pass around events more easily (watch out, it also has to be added to the data prop of the root Vue instance!):
-const bus = new Vue();
-Object.defineProperty(Vue.prototype, '$bus', { get() { return this.$root.bus; } });
+//init the global event bus + import eventhandlers for events emitted through this bus:
+import { bus, checkFilter, initBus } from './util/bus';
+initBus();
 
 new Vue({
 

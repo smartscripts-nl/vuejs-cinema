@@ -27,7 +27,8 @@ new Vue({
 
 		movies: [],
 
-		moment
+		moment,
+		day: moment()
 	},
 
 	methods: {

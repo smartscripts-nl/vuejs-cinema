@@ -9,7 +9,7 @@ const bus = new Vue();
 //initialize a global "event bus", to pass around events more easily (watch out, it also has to be added to the data prop of the root Vue instance!):
 Object.defineProperty(Vue.prototype, '$bus', { get() { return bus; } });
 
-let busEvents = {
+const busEvents = {
 
 	//=============== GLOBAL BUS EVENTHANDLER MEDIATORS ========
 
@@ -33,6 +33,7 @@ let busEvents = {
 
 		bus.$on(eventName,
 
+			//execute the eventhandler:
 			this['on' + eventName]
 
 			//to make the Vue root or component instance available to the imported event handler:
@@ -45,22 +46,24 @@ let busEvents = {
 	// =================== CUSTOM EVENTHANDLERS =====
 
 	/**
-	* The part after "on" is the name of the event thas was emitted
+	* Handle clicks on the filters for categories and times
+	*
+	* The part after "on" is the name of the event thas was emitted.
 	*/
 	onCheckFilter(category, title, checked) {
 
-			if (checked) {
-				this[category].push(title);
-			}
+		if (checked) {
+			this[category].push(title);
+		}
 
-			//remove item from active filters:
-			else {
-				let index = this[category].indexOf(title);
+		//remove item from active filters:
+		else {
+			let index = this[category].indexOf(title);
 
-				if (index > -1) {
-					this[category].splice(index, 1);
-				}
+			if (index > -1) {
+				this[category].splice(index, 1);
 			}
+		}
 	}
 };
 

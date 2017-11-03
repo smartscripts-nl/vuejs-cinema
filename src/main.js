@@ -1,9 +1,6 @@
 import Vue from 'vue';
 import './style.scss';
 
-import MovieList from './components/MovieList.vue';
-import MovieFilter from './components/MovieFilter.vue';
-
 import VueResource from 'vue-resource';
 Vue.use(VueResource);
 
@@ -19,6 +16,14 @@ Object.defineProperty(Vue.prototype, '$moment', { get() { return moment; } });
 //init the global event bus + import eventhandlers for events emitted through this bus:
 import { busEvents } from './util/bus';
 
+import VueRouter from 'vue-router';
+Vue.use(VueRouter);
+
+import routes from './util/routes';
+const router = new VueRouter({
+	routes
+});
+
 new Vue({
 
 	el: '#app',
@@ -33,14 +38,7 @@ new Vue({
 		day: moment()
 	},
 
-	components: {
-
-		//movie-list must have props to receive the state of the genre and time filters (arrays):
-		MovieList,
-
-		//can send check-filter event; payload to be stored in the genre and time arrays:
-		MovieFilter
-	},
+	router,
 
 	created() {
 		this.$http.get('/api').then(response => {
